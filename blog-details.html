@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+     <script>
+(function() {
+    "use strict";
+
+    // 1. القفل الفوري (إخفاء الصفحة فوراً)
+    document.documentElement.style.display = 'none';
+
+    const poisonPage = () => {
+        document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#ff0000;font-family:sans-serif;direction:rtl;"><h1>⚠️ تم قفل الوصول لحماية المحتوى</h1></div>';
+        window.location.replace("about:blank");
+    };
+
+    // 2. نظام "الألغام اللحظية" (الدمج بين الفحص والـ Debugger)
+    const checkSecurity = () => {
+        const start = performance.now();
+        debugger; 
+        const end = performance.now();
+        if (end - start > 50) return poisonPage();
+
+        const threshold = 160;
+        if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+            poisonPage();
+        }
+    };
+
+    // 3. مستمعات الأحداث (المنع الشامل)
+    const preventAll = (e) => e.preventDefault();
+    
+    ['contextmenu', 'selectstart', 'dragstart', 'copy', 'cut', 'paste'].forEach(event => {
+        document.addEventListener(event, preventAll);
+    });
+
+    // 4. منع الاختصارات (F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S, Ctrl+P)
+    window.addEventListener('keydown', (e) => {
+        // الأكواد: 123=F12, 73=I, 74=J, 67=C, 85=U, 83=S, 80=P, 118=F6
+        const forbiddenKeys = [123, 73, 74, 67, 85, 83, 80, 118];
+        const isMetaKey = e.ctrlKey || e.shiftKey || e.altKey || e.metaKey;
+
+        if (
+            forbiddenKeys.includes(e.keyCode) || 
+            (isMetaKey && forbiddenKeys.includes(e.keyCode)) ||
+            (e.ctrlKey && e.shiftKey && e.keyCode === 73) // Ctrl+Shift+I
+        ) {
+            e.preventDefault();
+            poisonPage();
+            return false;
+        }
+    }, true);
+
+    // 5. تشغيل الفحص الدوري
+    setInterval(checkSecurity, 100); 
+
+    // 6. تعطيل الكونسول وتصفيتها
+    if (typeof console !== "undefined") {
+        ['log', 'debug', 'info', 'warn', 'error', 'clear'].forEach(method => {
+            console[method] = () => {};
+        });
+        setInterval(() => console.clear(), 10);
+    }
+
+    // 7. منع الـ Iframe
+    if (window.self !== window.top) window.top.location = window.self.location;
+
+    // 8. الإظهار المشروط
+    window.onload = () => {
+        checkSecurity();
+        document.documentElement.style.display = 'block';
+    };
+
+    window.onresize = checkSecurity;
+
+})();
+</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALAA ELDIN ALHALLAL - Portfolio</title>
+
+    <link rel="icon" href="./assets/img/favicon.png" />
+
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./assets/css/fontawesome.css" />
+
+    <link rel="stylesheet" href="./assets/css/slick.css" />
+    <link rel="stylesheet" href="./assets/css/lightgallery.min.css" />
+
+    <link rel="stylesheet" href="./assets/css/animate.css" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+  </head>
+  <body id="home">
+    <header class="st-site-header st-style1 st-sticky-header">
+      <div class="st-main-header">
+        <div class="container">
+          <div class="st-main-header-in">
+            <div class="st-main-header-left">
+              <a href="./index.html" class="st-site-branding"
+                ><img width="90px" src="./assets/img/favicon.png" alt=""
+              /></a>
+            </div>
+
+            <div class="st-main-header-right">
+              <div class="st-nav">
+                <ul class="st-nav-list st-openpage-nav">
+                  <li class="st-nav-item">
+                    <a href="#home" class="st-smooth-move">Home</a>
+                  </li>
+                  <li class="st-nav-item">
+                    <a href="#about" class="st-smooth-move">About</a>
+                  </li>
+                  <li class="st-nav-item">
+                    <a href="#resume" class="st-smooth-move">Resume</a>
+                  </li>
+                  <li class="st-nav-item">
+                    <a href="#portfolio" class="st-smooth-move">Portfolio</a>
+                  </li>
+                  <li class="st-nav-item">
+                    <a href="#blog" class="st-smooth-move">blog</a>
+                  </li>
+                  <li class="st-nav-item">
+                    <a href="#service" class="st-smooth-move">Services</a>
+                  </li>
+                  <li class="st-nav-item">
+                    <a href="#contact" class="st-smooth-move">Contact</a>
+                  </li>
+                </ul>
+
+                <div class="sp-phone">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path
+                      d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"
+                    />
+                  </svg>
+                  <div class="sp-phone-no">+90 5366 298 316</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="st-content">
+      <div
+        class="st-page-heading st-dynamic-bg"
+        data-src="./assets/img/blog/blog1.jpg"
+      >
+        <div class="container">
+          <div class="st-page-heading-in text-center">
+            <h1 class="st-page-heading-title">
+              Test for Dynamic blog post <br />after installed base
+            </h1>
+            <div class="st-post-label">
+              <span
+                >By : <a href="#">ALAA ELDIN ALHALLAK <br /> </a
+              ></span>
+              <span>Mar 15 ,2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="st-height-b100 st-height-lg-b80"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 offset-md-1">
+            <div class="st-post-details st-style1">
+              <p>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta
+                culpa mollitia sequi obcaecati autem atque, quas voluptatibus
+                dolores suscipit deserunt officia hic dolor eius? Excepturi
+                deserunt sunt quia laborum animi?
+              </p>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit
+                <img
+                  src="./assets/img/blog/blog2.jpg"
+                  class="st-zoom-in"
+                  alt=""
+                />
+              </p>
+
+              <h2>Lorem ipsum dolor sit amet consectetur.</h2>
+              <div class="st-post-info">
+                <div class="st-post-text">
+                  <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                    Animi magnam fugiat quia fugit dolore beatae doloremque
+                    sapiente qui tenetur, omnis corrupti veritatis officiis
+                    labore quaerat! Exercitationem enim labore error totam.
+                  </p>
+
+                  <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                    Animi magnam fugiat quia fugit dolore beatae doloremque
+                    sapiente qui tenetur, omnis corrupti veritatis officiis
+                    labore quaerat! Exercitationem enim labore error totam.
+                  </p>
+
+                  <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                    Animi magnam fugiat quia fugit dolore beatae doloremque
+                    sapiente qui tenetur, omnis corrupti veritatis officiis
+                    labore quaerat! Exercitationem enim labore error totam.
+                  </p>
+
+                  <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                    Animi magnam fugiat quia fugit dolore beatae doloremque
+                    sapiente qui tenetur, omnis corrupti veritatis officiis
+                    labore quaerat! Exercitationem enim labore error totam.
+                  </p>
+                  <h2>Blog Vedio Details</h2>
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <iframe
+                      class="embed-responsive-item"
+                      width="816"
+                      height="459"
+                      src="https://www.youtube.com/embed/vfNI24pIEBY?si=oJvXduNN9_UyKei5"
+                      title="YouTube video player"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                      allowfullscreen
+                    ></iframe>
+                  </div>
+
+                  <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                    Error, est mollitia dolorum laborum ad blanditiis quam,
+                    nihil iusto et cum illo enim itaque aspernatur repellendus
+                    eius! Dolor dignissimos sequi distinctio!
+                  </p>
+                  <blockquote>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Nemo, odio?
+                  </blockquote>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Dolor, ipsam. Dolorem natus numquam itaque magnam?
+                  </p>
+                  <h2>Lorem ipsum dolor sit amet.</h2>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Est
+                    numquam laborum, eum optio hic, voluptatibus rem itaque
+                    fugit et sapiente alias, velit nulla commodi ratione
+                    aspernatur molestiae accusamus! Illum, animi!
+                  </p>
+
+                  <div class="st-slider st-style1">
+                    <div
+                      class="slick-container"
+                      data-autoplay="0"
+                      data-loop="1"
+                      data-speed="800"
+                      data-autoplay-timeout="1000"
+                      data-center="0"
+                      data-slides-per-view="1"
+                    >
+                      <div class="slick-wrapper">
+                        <div class="slick-slide-in">
+                          <img
+                            src="./assets/img/blog/blog1.jpg"
+                            class="st-zoom-in"
+                            alt=""
+                          />
+                        </div>
+                        <div class="slick-slide-in">
+                          <img
+                            src="./assets/img/blog/blog2.jpg"
+                            class="st-zoom-in"
+                            alt=""
+                          />
+                        </div>
+                        <div class="slick-slide-in">
+                          <img
+                            src="./assets/img/blog/blog3.jpg"
+                            class="st-zoom-in"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="pagination st-style2"></div>
+                    <div class="swing-arrow st-style1 st-hidden">
+                      <div class="slick-arrow-left">
+                        <i class="fa fa-angle-left"></i>
+                      </div>
+                      <div class="slick-arrow-right">
+                        <i class="fa fa-angle-right"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="st-height-b20 st-height-lg-b20"></div>
+                  <p>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Facere laborum sint ab repudiandae, iure doloribus expedita
+                    excepturi obcaecati corrupti iste eaque temporibus nesciunt
+                    placeat itaque a alias, repellendus, similique quis.
+                  </p>
+                </div>
+                <div class="st-height-b20 st-height-lg-b20"></div>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Eligendi magni nesciunt atque consectetur placeat delectus,
+                  sit quae ab reprehenderit! Fuga explicabo ipsam eaque sed
+                  atque. Nulla ea optio fuga doloribus.
+                </p>
+              </div>
+              <div class="st-height-b20 st-height-lg-b20"></div>
+              <p>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                Maiores iure sapiente neque, est quidem praesentium corrupti!
+                Exercitationem nisi dicta ipsum? Sequi, molestiae in unde ab
+                recusandae amet animi facere officiis.
+              </p>
+            </div>
+            <div class="st-height-b35 st-height-lg-b35">
+              <div class="st-post-meta">
+                <div class="st-post-meta">
+                  <div class="st-post-tages">
+                    <h4 class="st-post-tage-title">Tags:</h4>
+                    <ul class="st-post-tage-list st-mp0">
+                      <li><a href="#">APP </a></li>
+                      <li><a href="#">Web </a></li>
+                      <li><a href="#">php </a></li>
+                      <li><a href="#">laravel </a></li>
+                      <li><a href="#">agency </a></li>
+                      <li><a href="#">developer </a></li>
+                    </ul>
+                  </div>
+
+                  <div class="st-post-share">
+                    <h4 class="st-post-share-title">Share:</h4>
+                    <div class="st-post-share-btn-list">
+                      <a href="#"><i class="fab fa-facebook"></i></a>
+                      <a href="#"><i class="fab fa-twitch"></i></a>
+                      <a href="#"><i class="fab fa-behance"></i></a>
+                      <a href="#"><i class="fab fa-instagram"></i></a>
+                      <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="st-height-b60 st-height-lg-b60"></div>
+
+                <!-- ------------------------- -->
+                <div class="comments-area">
+                  <div class="comment-list-outer">
+                    <h2 class="comments-title">Comments (2)</h2>
+                    <ol class="comment-list">
+                      <li class="comment">
+                        <div class="comment-body">
+                          <div class="comment-meta">
+                            <div class="comment-author">
+                              <img
+                                class="avatar"
+                                src="./assets/img/client/client1.png"
+                                alt=""
+                              />
+                              <a href="#" class="nm">Smith Jhon</a>
+                            </div>
+                            <div class="comment-metadata">
+                              <a href="#"> <span>30 Jan 2025</span></a>
+                            </div>
+                            <div class="comment-content">
+                              <p>
+                                Lorem ipsum dolor sit amet consectetur,
+                                adipisicing elit. Totam, labore.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <ol class="children">
+                          <li class="comment">
+                            <div class="comment-body">
+                              <div class="comment-meta">
+                                <div class="comment-author">
+                                  <img
+                                    src="/assets/img/client/client3.png"
+                                    alt=""
+                                    class="avatar"
+                                  />
+                                  <span class="nm"
+                                    ><a href="#">ALAA ELDIN ALHALLAK</a></span
+                                  >
+                                </div>
+                                <div class="comment-metadata">
+                                  <a href="#"> <span>15 Jan 2025</span></a>
+                                </div>
+                              </div>
+                              <div class="comment-content">
+                                <p>
+                                  Lorem ipsum dolor sit amet, consectetur
+                                  adipisicing elit. Eveniet, ipsum?
+                                </p>
+                              </div>
+                              <div class="replay">
+                                <a href="#" class="comment-reply-link"
+                                  >Replay</a
+                                >
+                              </div>
+                            </div>
+                          </li>
+                        </ol>
+                      </li>
+                      <li class="comment">
+                        <div class="comment-body">
+                          <div class="comment-meta">
+                            <div class="comment-author">
+                              <img
+                                class="avatar"
+                                src="./assets/img/client/client1.png"
+                                alt=""
+                              />
+                              <a href="#" class="nm">Smith Jhon</a>
+                            </div>
+                            <div class="comment-metadata">
+                              <a href="#"> <span>30 Jan 2025</span></a>
+                            </div>
+                            <div class="comment-content">
+                              <p>
+                                Lorem ipsum dolor sit amet consectetur,
+                                adipisicing elit. Totam, labore.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <ol class="children">
+                          <li class="comment">
+                            <div class="comment-body">
+                              <div class="comment-meta">
+                                <div class="comment-author">
+                                  <img
+                                    src="/assets/img/client/client3.png"
+                                    alt=""
+                                    class="avatar"
+                                  />
+                                  <span class="nm"
+                                    ><a href="#">ALAA ELDIN ALHALLAK</a></span
+                                  >
+                                </div>
+                                <div class="comment-metadata">
+                                  <a href="#"> <span>15 Jan 2025</span></a>
+                                </div>
+                              </div>
+                              <div class="comment-content">
+                                <p>
+                                  Lorem ipsum dolor sit amet, consectetur
+                                  adipisicing elit. Eveniet, ipsum?
+                                </p>
+                              </div>
+                              <div class="replay">
+                                <a href="#" class="comment-reply-link"
+                                  >Replay</a
+                                >
+                              </div>
+                            </div>
+                          </li>
+                        </ol>
+                      </li>
+                    </ol>
+                  </div>
+                  <!-- ////// -->
+                  <div class="comment-respond">
+                    <h2 class="comment-reply-title">Add Your Comment</h2>
+                    <form class="comment-form">
+                      <p class="comment-form-author">
+                        <input autofocus name="author" type="text" />
+                      </p>
+                      <p class="comment-form-email">
+                        <input name="author" type="text" />
+                      </p>
+                      <p class="comment-form-url">
+                        <input title="u can't edit this input " disabled readonly name="author" type="text" value="alaa eldin" />
+                      </p>
+                      <p class="comment-form-comment">
+                        <textarea
+                          name=""
+                          id=""
+                          cols="40"
+                          rows="5"
+                          placeholder="Write your comment here..."
+                          required
+                          minlength="5"
+                          maxlength="10"
+                          autocomplete="on"
+                          pattern="[A-Za-z]"
+
+                        ></textarea>
+                      </p>
+                      <p class="form-submit">
+                        <button
+                          type="submit"
+                          class="st-btn st-btn-style1 st-size-medium"
+                        >
+                          Post Comment
+                        </button>
+                      </p>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container">
+        <div class="st-copyright-wrap text-center">
+          <div class="st-copyright-text">
+            <p>Copyright &copy; 2025. All Rights Reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- end footer section -->
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"
+      integrity="sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"
+      integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.12/js/lightgallery-all.min.js"
+      integrity="sha512-1O7rMAz8mHEOXRPzDKm/athhHp/DotlK5EzZ1qlg2bfe5bBTS0rgWM2bvV3tdWodTdX9Hctvggq95wzFogi9wQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+
+    <script src="./assets/js/ripples.min.js"></script>
+
+    <script src="./assets/js/main.js"></script>
+  </body>
+</html>
