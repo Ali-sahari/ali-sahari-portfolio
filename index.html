@@ -1,79 +1,84 @@
 <!doctype html>
 <html lang="en">
   <head>
-  <script>
-(function() {
-    "use strict";
+    <script>
+      (function () {
+        "use strict";
 
-    // 1. القفل الفوري (إخفاء الصفحة فوراً)
-    document.documentElement.style.display = 'none';
+        document.documentElement.style.display = "none";
 
-    const poisonPage = () => {
-        document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#ff0000;font-family:sans-serif;direction:rtl;"><h1>⚠️ تم قفل الوصول لحماية المحتوى</h1></div>';
-        window.location.replace("about:blank");
-    };
+        const poisonPage = () => {
+          document.body.innerHTML =
+            '<div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#ff0000;font-family:sans-serif;direction:rtl;"><h1>⚠️ تم قفل الوصول لحماية المحتوى</h1></div>';
+          window.location.replace("about:blank");
+        };
 
-    // 2. نظام "الألغام اللحظية" (الدمج بين الفحص والـ Debugger)
-    const checkSecurity = () => {
-        const start = performance.now();
-        debugger; 
-        const end = performance.now();
-        if (end - start > 50) return poisonPage();
+        const checkSecurity = () => {
+          const start = performance.now();
+          debugger;
+          const end = performance.now();
+          if (end - start > 50) return poisonPage();
 
-        const threshold = 160;
-        if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+          const threshold = 160;
+          if (
+            window.outerWidth - window.innerWidth > threshold ||
+            window.outerHeight - window.innerHeight > threshold
+          ) {
             poisonPage();
-        }
-    };
+          }
+        };
 
-    // 3. مستمعات الأحداث (المنع الشامل)
-    const preventAll = (e) => e.preventDefault();
-    
-    ['contextmenu', 'selectstart', 'dragstart', 'copy', 'cut', 'paste'].forEach(event => {
-        document.addEventListener(event, preventAll);
-    });
-
-    // 4. منع الاختصارات (F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S, Ctrl+P)
-    window.addEventListener('keydown', (e) => {
-        // الأكواد: 123=F12, 73=I, 74=J, 67=C, 85=U, 83=S, 80=P, 118=F6
-        const forbiddenKeys = [123, 73, 74, 67, 85, 83, 80, 118];
-        const isMetaKey = e.ctrlKey || e.shiftKey || e.altKey || e.metaKey;
-
-        if (
-            forbiddenKeys.includes(e.keyCode) || 
-            (isMetaKey && forbiddenKeys.includes(e.keyCode)) ||
-            (e.ctrlKey && e.shiftKey && e.keyCode === 73) // Ctrl+Shift+I
-        ) {
-            e.preventDefault();
-            poisonPage();
-            return false;
-        }
-    }, true);
-
-    // 5. تشغيل الفحص الدوري
-    setInterval(checkSecurity, 100); 
-
-    // 6. تعطيل الكونسول وتصفيتها
-    if (typeof console !== "undefined") {
-        ['log', 'debug', 'info', 'warn', 'error', 'clear'].forEach(method => {
-            console[method] = () => {};
+        // 👇 سمحنا بالتحديد والنسخ
+        const preventAll = (e) => e.preventDefault();
+        ["contextmenu", "dragstart", "cut", "paste"].forEach((event) => {
+          document.addEventListener(event, preventAll);
         });
-        setInterval(() => console.clear(), 10);
-    }
 
-    // 7. منع الـ Iframe
-    if (window.self !== window.top) window.top.location = window.self.location;
+        window.addEventListener(
+          "keydown",
+          (e) => {
+            const keyCode = e.keyCode || e.which;
+            const isMetaKey = e.ctrlKey || e.metaKey;
+            const isShift = e.shiftKey;
 
-    // 8. الإظهار المشروط
-    window.onload = () => {
-        checkSecurity();
-        document.documentElement.style.display = 'block';
-    };
+            const functionKeys = [123, 118];
+            const dangerousChars = [85, 83, 80, 73, 74, 67];
 
-    window.onresize = checkSecurity;
+            if (
+              functionKeys.includes(keyCode) ||
+              (isMetaKey && dangerousChars.includes(keyCode)) ||
+              (isMetaKey && isShift && keyCode === 73)
+            ) {
+              e.preventDefault();
+              poisonPage();
+              return false;
+            }
+          },
+          true,
+        );
 
-})();
-</script>
+        setInterval(checkSecurity, 500);
+
+        if (typeof console !== "undefined") {
+          ["log", "debug", "info", "warn", "error", "clear"].forEach(
+            (method) => {
+              console[method] = () => {};
+            },
+          );
+          setInterval(() => console.clear(), 100);
+        }
+
+        if (window.self !== window.top)
+          window.top.location = window.self.location;
+
+        window.onload = () => {
+          checkSecurity();
+          document.documentElement.style.display = "block";
+        };
+
+        window.onresize = checkSecurity;
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALI ZAINALABDIN SAHARI - Portfolio</title>
@@ -88,7 +93,6 @@
 
     <link rel="stylesheet" href="./assets/css/animate.css" />
     <link rel="stylesheet" href="./assets/css/style.css" />
- 
   </head>
   <body id="home">
     <header class="st-site-header st-style1 st-sticky-header">
